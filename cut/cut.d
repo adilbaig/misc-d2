@@ -58,6 +58,7 @@ int main(string[] args)
     
     bool parseFields = cast(bool)(fields.length);
     
+    // Parse fields or bytes
     string str = ((!parseFields) ? bytes : fields) ~= '\0';
     Range[] ranges = parseRange(str);
     
@@ -65,28 +66,28 @@ int main(string[] args)
         writeln(ranges);
     }
     
-    auto file = File(args[1]); // Open for reading
-    
-    /*
-     For bytes, read each byte and compare to printing range
-     if in range, print else skip
-     For fields accumalate chars until \t. That is the first field,
-     if in list, print, else discard.
-    */
-    foreach (line; file.byLine())
+    // Foreach file
+    foreach(filename; args[1 .. $]) 
     {
-        if (line.empty)
-            continue;
+        auto file = File(filename); // Open for reading
         
-        if(parseFields)
+        // Iterate line by line
+        foreach (line; file.byLine())
         {
-            auto arr = cast(string[])split(line, to!string(delimiter));
-            printRange!(string)(arr, ranges, delimiter, complement);
+            if (line.empty)
+                continue;
+            
+            if(parseFields)
+            {
+                // If fields, tokenize by delimiter and printRange
+                auto arr = cast(string[])split(line, to!string(delimiter));
+                printRange!(string)(arr, ranges, delimiter, complement);
+            }
+            else
+                printRange!(char)(line, ranges, '\0', complement);
+            
+            writeln("");
         }
-        else
-            printRange!(char)(line, ranges, '\0', complement);
-        
-        writeln("");
     }
     
     return 0;
