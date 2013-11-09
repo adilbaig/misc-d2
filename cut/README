@@ -1,0 +1,40 @@
+A reduced functionality version of the Linux cut command. 
+
+Requirements
+Tested with dmd compiler 2.063
+
+
+To compile
+ dmd cut.d rangeParser.d
+
+
+To compile w debug output
+ dmd -debug cut.d rangeParser.d
+
+
+To run unittests
+ dmd -unittest cut.d rangeParser.d
+
+ 
+Usage 
+ Usage: cut OPTION... FILE...
+Print selected parts of lines from each FILE to standard output.
+
+Mandatory arguments to long options are mandatory for short options too.
+  -b, --bytes=LIST        select only these bytes
+  -d, --delimiter=DELIM   use DELIM instead of TAB for field delimiter
+  -f, --fields=LIST       select only these fields;  also print any line
+                            that contains no delimiter character, unless
+                            the -s option is specified
+      --complement        complement the set of selected bytes, characters
+                            or fields
+
+Use one, and only one of -b or -f.  Each LIST is made up of one
+range, or many ranges separated by commas.  Selected input is written
+in the same order that it is read, and is written exactly once.
+Each range is one of:
+
+  N     N'th byte, character or field, counted from 1
+  N-    from N'th byte, character or field, to end of line
+  N-M   from N'th to M'th (included) byte, character or field
+  -M    from first to M'th (included) byte, character or field
